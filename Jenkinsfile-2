@@ -1,19 +1,9 @@
 pipeline {
     agent {
-      docker {
-        image 'python:2-alpine'
-      }
-    }
-
-    stages {
-        stage('Execution') {
-            steps {
-                echo 'Hello World'
-                sh 'python -m pipeline {
-    agent {
-      docker {
-        image 'python:2-alpine'
-      }
+        docker {
+            alwaysPull true
+            image 'python:latest'
+        }  
     }
 
     stages {
@@ -22,16 +12,10 @@ pipeline {
                 echo 'Hello World'
             }
         }
-        stage('Checkout') {
-            steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/sandrohr95/Jenkins-Examples.git']]])
-            }
-        }
         
         stage('build') {
             
             steps {
-                git branch: 'main', url: 'https://github.com/sandrohr95/Jenkins-Examples.git'
                 sh 'python jenkins_python.py'
                 
             }
@@ -42,10 +26,5 @@ pipeline {
                 echo 'testing ... '
             }
         }
-    }
-}
-            }
-        }
-       
     }
 }
